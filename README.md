@@ -1,2 +1,2 @@
 # jlox
-Lox implantationwith Java from "Crafting Interpreters"
+implement Lox with Java from "Crafting Interpreters"
