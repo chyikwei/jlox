@@ -32,10 +32,10 @@ abstract class Expr {
   }
 
   static class Grouping extends Expr {
-    final Expr expressions;
+    final Expr expression;
 
-    Grouping(Expr expressions) {
-      this.expressions = expressions;
+    Grouping(Expr expression) {
+      this.expression = expression;
     }
 
     @Override

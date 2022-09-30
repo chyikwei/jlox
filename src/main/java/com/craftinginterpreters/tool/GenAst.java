@@ -17,7 +17,7 @@ public class GenAst {
         "Expr",
         Arrays.asList(
             "Binary : Expr left, Token operator, Expr right",
-            "Grouping : Expr expressions",
+            "Grouping : Expr expression",
             "Literal : Object value",
             "Unary : Token operator, Expr right"));
   }
