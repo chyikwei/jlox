@@ -4,10 +4,11 @@ import java.util.List;
 
 public class Parser {
   private final List<Token> tokens;
-  private int current = 0;
+  private int current;
 
   Parser(List<Token> tokens) {
     this.tokens = tokens;
+    this.current = 0;
   }
 
   Expr parse() {
@@ -76,9 +77,15 @@ public class Parser {
   }
 
   private Expr primary() {
-    if (match(TokenType.FALSE)) return new Expr.Literal(false);
-    if (match(TokenType.TRUE)) return new Expr.Literal(true);
-    if (match(TokenType.NIL)) return new Expr.Literal(null);
+    if (match(TokenType.FALSE)) {
+      return new Expr.Literal(false);
+    }
+    if (match(TokenType.TRUE)) {
+      return new Expr.Literal(true);
+    }
+    if (match(TokenType.NIL)) {
+      return new Expr.Literal(null);
+    }
 
     if (match(TokenType.NUMBER, TokenType.STRING)) {
       return new Expr.Literal(previous().literal());
@@ -94,7 +101,9 @@ public class Parser {
   }
 
   private Token consume(TokenType type, String message) {
-    if (check(type)) return advance();
+    if (check(type)) {
+      return advance();
+    }
 
     throw error(peek(), message);
   }
@@ -108,7 +117,9 @@ public class Parser {
     advance();
 
     while (!isAtEnd()) {
-      if (previous().type() == TokenType.SEMICOLON) return;
+      if (previous().type() == TokenType.SEMICOLON) {
+        return;
+      }
 
       switch (peek().type()) {
         case CLASS:

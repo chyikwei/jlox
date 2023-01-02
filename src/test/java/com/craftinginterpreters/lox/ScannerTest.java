@@ -44,7 +44,7 @@ class ScannerTest {
   void testKeyword() {
     Map<String, TokenType> keywords =
         Stream.of(
-                new Object[][] {
+                new Object[][]{
                   {"and", TokenType.AND},
                   {"return", TokenType.RETURN},
                 })
