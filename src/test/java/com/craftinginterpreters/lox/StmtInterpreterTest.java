@@ -62,4 +62,21 @@ public class StmtInterpreterTest
       this.outputStream.reset();
     }
   }
+
+  @Test
+  void testBlock() {
+    String input = """
+        var a = "global_a";
+        print a;
+        {
+          var a = "inner_a";
+          print a;
+        }
+        print a;
+        """;
+    List<Stmt> statements = new Parser(new Scanner(input).scanTokens()).parse();
+    this.interpreter.interpret(statements);
+    String output = this.outputStream.toString().strip();
+    assertEquals("global_a\ninner_a\nglobal_a", output);
+  }
 }
