@@ -17,7 +17,9 @@ public class StmtInterpreterTest
   private Map<String, String> printStatements = Map.ofEntries(
       entry("print 123;", "123"),
       entry("print 1 + 1;", "2"),
-      entry("print (3 * 3);", "9")
+      entry("print (3 * 3);", "9"),
+      entry("print true;", "true"),
+      entry("print \"one\";", "one")
   );
 
   @BeforeEach
