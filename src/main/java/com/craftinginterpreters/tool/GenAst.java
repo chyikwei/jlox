@@ -20,6 +20,14 @@ public class GenAst {
             "Grouping : Expr expression",
             "Literal : Object value",
             "Unary : Token operator, Expr right"));
+
+    defineAst(
+        outputDir,
+        "Stmt",
+        Arrays.asList(
+            "Expression : Expr expression",
+            "Print : Expr expression"
+        ));
   }
 
   private static void defineAst(String outputDir, String baseName, List<String> types)
@@ -31,9 +39,9 @@ public class GenAst {
     writer.println();
     writer.println("import java.util.List;");
     writer.println();
-    writer.println("abstract class " + baseName + "{");
+    writer.println("abstract class " + baseName + " {");
 
-    defineVisotor(writer, baseName, types);
+    defineVisitor(writer, baseName, types);
     writer.println();
 
     // ast classes
@@ -50,7 +58,7 @@ public class GenAst {
     writer.close();
   }
 
-  private static void defineVisotor(PrintWriter writer, String baseName, List<String> types) {
+  private static void defineVisitor(PrintWriter writer, String baseName, List<String> types) {
     writer.println("  interface Visitor<R> {");
 
     for (String type : types) {

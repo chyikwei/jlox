@@ -1,7 +1,5 @@
 package com.craftinginterpreters.lox;
 
-import org.junit.Before;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -9,7 +7,7 @@ import java.util.Map;
 import static java.util.Map.entry;
 import static org.junit.jupiter.api.Assertions.*;
 
-class InterpreterTest
+class ExprInterpreterTest
 {
     private Map<String, Double> numericExpressions = Map.ofEntries(
             entry("123", 123.0),
@@ -32,7 +30,7 @@ class InterpreterTest
     void testNumericValues() {
 
         for (Map.Entry<String, Double> entry : numericExpressions.entrySet()) {
-            Expr expr = new Parser(new Scanner(entry.getKey()).scanTokens()).parse();
+            Expr expr = new Parser(new Scanner(entry.getKey()).scanTokens()).parseExpression();
             Object eval = interpreter.evaluate(expr);
             assertEquals(entry.getValue(), (double) eval, 1e-10);
         }
@@ -41,7 +39,7 @@ class InterpreterTest
     void testBooleanValues() {
 
         for (Map.Entry<String, Boolean> entry : booleanExpressions.entrySet()) {
-            Expr expr = new Parser(new Scanner(entry.getKey()).scanTokens()).parse();
+            Expr expr = new Parser(new Scanner(entry.getKey()).scanTokens()).parseExpression();
             Object eval = interpreter.evaluate(expr);
             assertEquals(entry.getValue(), (boolean) eval);
         }

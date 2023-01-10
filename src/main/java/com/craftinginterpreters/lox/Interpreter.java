@@ -1,6 +1,21 @@
 package com.craftinginterpreters.lox;
 
-public class Interpreter implements Expr.Visitor {
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.util.List;
+
+public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>
+{
+
+  private PrintStream printStream;
+
+  public Interpreter() {
+    this(System.out);
+  }
+
+  public Interpreter(OutputStream out) {
+    this.printStream = new PrintStream(out);
+  }
 
   @Override
   public Object visitBinaryExpr(Expr.Binary expr)
@@ -83,6 +98,10 @@ public class Interpreter implements Expr.Visitor {
     return expr.accept(this);
   }
 
+  Object evaluate(Stmt statement) {
+    return statement.accept(this);
+  }
+
   private boolean isTruthy(Object object)
   {
     if (object == null) {
@@ -118,10 +137,11 @@ public class Interpreter implements Expr.Visitor {
     throw new RunTimeError(operator, "Operands must be numbers.");
   }
 
-  public void interpret(Expr expression) {
+  public void interpret(List<Stmt> statements) {
     try {
-      Object value = evaluate(expression);
-      System.out.println(stringify(value));
+      for (Stmt statement : statements) {
+        evaluate(statement);
+      }
     } catch (RunTimeError error) {
       Lox.runtimeError(error);
     }
@@ -140,5 +160,21 @@ public class Interpreter implements Expr.Visitor {
       return text;
     }
     return object.toString();
+  }
+
+  @Override
+  public Void visitExpressionStmt(Stmt.Expression stmt)
+  {
+    evaluate(stmt.expression);
+    return null;
+  }
+
+  @Override
+  public Void visitPrintStmt(Stmt.Print stmt)
+  {
+    Object value = evaluate(stmt.expression);
+    //TODO: change to printStream
+    printStream.println(stringify(value));
+    return null;
   }
 }

@@ -10,8 +10,8 @@ public class Scanner {
   private static final Map<String, TokenType> keywords;
   private final String source;
   private final List<Token> tokens = new ArrayList<>();
-  private int start = 0;
-  private int current = 0;
+  private int start;
+  private int current;
   private int line = 1;
 
   Scanner(String source) {
