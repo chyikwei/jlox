@@ -28,6 +28,11 @@ public class StmtInterpreterTest
       entry("var a = \"one\"; print a;", "one"),
       entry("var a = 1; var b = 1; print a + b;", "2")
       );
+  private Map<String, String> printAssignStatements = Map.ofEntries(
+      entry("var a = 123; a = 4; print a;", "4"),
+      entry("var a = 1; var b = 1; a = b = 3; print a + b;", "6")
+  );
+
 
   @BeforeEach
   void init() {
