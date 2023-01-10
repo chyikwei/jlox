@@ -6,8 +6,8 @@ import java.util.List;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>
 {
-
   private PrintStream printStream;
+  private Environment environment;
 
   public Interpreter() {
     this(System.out);
@@ -15,6 +15,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>
 
   public Interpreter(OutputStream out) {
     this.printStream = new PrintStream(out);
+    this.environment = new Environment();
   }
 
   @Override
@@ -92,6 +93,12 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>
 
     //unreachable
     return null;
+  }
+
+  @Override
+  public Object visitVariableExpr(Expr.Variable expr)
+  {
+    return environment.get(expr.name);
   }
 
   Object evaluate(Expr expr) {
@@ -173,8 +180,18 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>
   public Void visitPrintStmt(Stmt.Print stmt)
   {
     Object value = evaluate(stmt.expression);
-    //TODO: change to printStream
     printStream.println(stringify(value));
+    return null;
+  }
+
+  @Override
+  public Void visitVarStmt(Stmt.Var stmt)
+  {
+    Object value = null;
+    if (stmt.initializer != null) {
+      value = evaluate(stmt.initializer);
+    }
+    environment.define(stmt.name.lexeme(), value);
     return null;
   }
 }

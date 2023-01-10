@@ -14,7 +14,7 @@ public class StmtInterpreterTest
 {
   private ByteArrayOutputStream outputStream;
   private Interpreter interpreter;
-  private Map<String, String> printStatements = Map.ofEntries(
+  private Map<String, String> simplePrintStatements = Map.ofEntries(
       entry("print 123;", "123"),
       entry("print 1 + 1;", "2"),
       entry("print (3 * 3);", "9"),
@@ -22,18 +22,35 @@ public class StmtInterpreterTest
       entry("print \"one\";", "one")
   );
 
+  private Map<String, String> printVarStatements = Map.ofEntries(
+      entry("var a = 123; print a;", "123"),
+      entry("var a = true; print a;", "true"),
+      entry("var a = \"one\"; print a;", "one"),
+      entry("var a = 1; var b = 1; print a + b;", "2")
+      );
+
   @BeforeEach
   void init() {
-    System.out.println("init");
     this.outputStream = new ByteArrayOutputStream();
     this.interpreter = new Interpreter(this.outputStream);
   }
 
   @Test
-  void testPrintStmt() {
-    for (Map.Entry<String, String> entry : printStatements.entrySet()) {
+  void testSimplePrintStmt() {
+    for (Map.Entry<String, String> entry : simplePrintStatements.entrySet()) {
       List<Stmt> statements = new Parser(new Scanner(entry.getKey()).scanTokens()).parse();
       assertEquals(1, statements.size());
+      this.interpreter.interpret(statements);
+      String output = this.outputStream.toString().strip();
+      assertEquals(entry.getValue(), output);
+      this.outputStream.reset();
+    }
+  }
+
+  @Test
+  void testVarPrintStmt() {
+    for (Map.Entry<String, String> entry : printVarStatements.entrySet()) {
+      List<Stmt> statements = new Parser(new Scanner(entry.getKey()).scanTokens()).parse();
       this.interpreter.interpret(statements);
       String output = this.outputStream.toString().strip();
       assertEquals(entry.getValue(), output);
