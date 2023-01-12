@@ -31,4 +31,12 @@ class AstPrinterTest {
             new Expr.Literal(123), new Token(TokenType.STAR, "*", null, 1), new Expr.Literal(456));
     assertEquals("(* 123 456)", new AstPrinter().print(expr));
   }
+
+  @Test
+  void testLogical() {
+    Expr expr =
+        new Expr.Logical(
+            new Expr.Literal(123), new Token(TokenType.OR, "or", null, 1), new Expr.Literal(456));
+    assertEquals("(or 123 456)", new AstPrinter().print(expr));
+  }
 }
