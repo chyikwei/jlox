@@ -250,4 +250,13 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>
     environment.define(stmt.name.lexeme(), value);
     return null;
   }
+
+  @Override
+  public Void visitWhileStmt(Stmt.While stmt)
+  {
+    while (isTruthy(evaluate(stmt.condition))) {
+      evaluate(stmt.body);
+    }
+    return null;
+  }
 }

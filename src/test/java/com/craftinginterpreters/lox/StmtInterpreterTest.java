@@ -94,4 +94,29 @@ public class StmtInterpreterTest
       assertEquals(entry.getValue(), output);
     }
   }
+
+  @Test
+  void testWhileLoop() {
+    String input = """
+        var a = 0;
+        while (a < 3) {
+          print a;
+          a = a + 1;
+        }
+        """;
+    String output = PrintOutputHelper.printOutput(input);
+    assertEquals("0\n1\n2", output);
+  }
+
+  @Test
+  void testForLoop() {
+    String input = """
+       for (var i = 0; i < 3; i = i + 1) {
+         print i;  
+       }
+        """;
+    String output = PrintOutputHelper.printOutput(input);
+    assertEquals("0\n1\n2", output);
+  }
+
 }
