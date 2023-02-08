@@ -2,11 +2,13 @@ package com.craftinginterpreters.lox;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>
 {
   private PrintStream printStream;
+  final Environment globals;
   private Environment environment;
 
   public Interpreter() {
@@ -15,7 +17,27 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>
 
   public Interpreter(OutputStream out) {
     this.printStream = new PrintStream(out);
-    this.environment = new Environment();
+    this.globals = new Environment();
+    this.environment = globals;
+
+    globals.define("clock", new LoxCallable() {
+      @Override
+      public int arity()
+      {
+        return 0;
+      }
+
+      @Override
+      public Object call(Interpreter interpreter, List<Object> arguments)
+      {
+        return (double) System.currentTimeMillis() / 1000.0;
+      }
+
+      @Override
+      public String toString() {
+        return "<native fn>";
+      };
+    });
   }
 
   @Override
@@ -73,6 +95,29 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>
     }
     // unreachable
     return null;
+  }
+
+  @Override
+  public Object visitCallExpr(Expr.Call expr)
+  {
+    Object callee = evaluate(expr.callee);
+    List<Object> arguments = new ArrayList<>();
+    for (Expr argument : expr.arguments) {
+      arguments.add(evaluate(argument));
+    }
+
+    if (!(callee instanceof LoxCallable)) {
+      throw new RunTimeError(expr.paren, "Can only call functions and classes");
+    }
+
+    LoxCallable function = (LoxCallable) callee;
+    if (function.arity() != arguments.size()) {
+      throw new RunTimeError(expr.paren, "Expected "
+          + function.arity() + " arguments but got"
+          + arguments.size() + ".");
+    }
+
+    return function.call(this, arguments);
   }
 
   @Override
@@ -218,6 +263,14 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>
   public Void visitExpressionStmt(Stmt.Expression stmt)
   {
     evaluate(stmt.expression);
+    return null;
+  }
+
+  @Override
+  public Void visitFunctionStmt(Stmt.Function stmt)
+  {
+    LoxFunction function = new LoxFunction(stmt);
+    environment.define(stmt.name.lexeme(), function);
     return null;
   }
 
