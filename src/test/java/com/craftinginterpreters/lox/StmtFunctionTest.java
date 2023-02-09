@@ -31,7 +31,7 @@ public class StmtFunctionTest
     assertEquals("1\n2\n3", output);
   }
 
-    @Test
+  @Test
   void testFunctionName() {
     String input = """
     fun add(a, b) {
@@ -43,4 +43,28 @@ public class StmtFunctionTest
     assertEquals("<fn add>", output);
   }
 
+  @Test
+  void testSimpleReturnValue() {
+    String input = """
+    fun add(a, b) {
+      return a + b;
+    }
+    print add(1, 2);
+    """;
+    String output = PrintOutputHelper.printOutput(input);
+    assertEquals("3", output);
+  }
+
+  @Test
+  void testRecursiveReturnValue() {
+    String input = """
+    fun fib(n) {
+      if (n <= 1) return n;
+      return fib(n - 2) + fib(n - 1);
+    }
+    print fib(5);
+    """;
+    String output = PrintOutputHelper.printOutput(input);
+    assertEquals("5", output);
+  }
 }
