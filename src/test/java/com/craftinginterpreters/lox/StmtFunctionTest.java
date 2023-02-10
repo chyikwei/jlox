@@ -67,4 +67,41 @@ public class StmtFunctionTest
     String output = PrintOutputHelper.printOutput(input);
     assertEquals("5", output);
   }
+
+  @Test
+  void testClosure() {
+    String input = """
+    fun makeCounter() {
+      var i = 0;
+      fun count() {
+        i = i + 1;
+        print i;
+      }
+      return count;
+    }
+
+    var counter = makeCounter();
+    counter();
+    counter();
+    """;
+    String output = PrintOutputHelper.printOutput(input);
+    assertEquals("1\n2", output);
+  }
+  @Test
+  void testVarBinding() {
+    String input = """
+    var a = "global";
+    {
+      fun showA() {
+        print a;
+      }
+      showA();
+      var a = "block";
+      showA();
+    }
+    """;
+    String output = PrintOutputHelper.printOutput(input);
+    // TODO: fix this test
+    assertEquals("global\nblock", output);
+  }
 }
