@@ -101,7 +101,6 @@ public class StmtFunctionTest
     }
     """;
     String output = PrintOutputHelper.printOutput(input);
-    // TODO: fix this test
-    assertEquals("global\nblock", output);
+    assertEquals("global\nglobal", output);
   }
 }

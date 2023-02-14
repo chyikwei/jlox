@@ -11,6 +11,9 @@ class PrintOutputHelper
     Interpreter interpreter = new Interpreter(outputStream);
 
     List<Stmt> statements = new Parser(new Scanner(script).scanTokens()).parse();
+
+    Resolver resolver = new Resolver(interpreter);
+    resolver.resolve(statements);
     interpreter.interpret(statements);
     return outputStream.toString().strip();
   }
