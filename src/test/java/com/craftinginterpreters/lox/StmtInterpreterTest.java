@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
+import static com.craftinginterpreters.lox.PrintOutputHelper.printOutput;
 import static java.util.Map.entry;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -44,7 +45,7 @@ public class StmtInterpreterTest
   @Test
   void testSimplePrintStmt() {
     for (Map.Entry<String, String> entry : simpleStatements.entrySet()) {
-      String output = PrintOutputHelper.printOutput(entry.getKey());
+      String output = printOutput(entry.getKey());
       assertEquals(entry.getValue(), output);
     }
   }
@@ -52,7 +53,7 @@ public class StmtInterpreterTest
   @Test
   void testAssignPrintStmt() {
     for (Map.Entry<String, String> entry : assignStatements.entrySet()) {
-      String output = PrintOutputHelper.printOutput(entry.getKey());
+      String output = printOutput(entry.getKey());
       assertEquals(entry.getValue(), output);
     }
   }
@@ -60,7 +61,7 @@ public class StmtInterpreterTest
   @Test
   void testVarPrintStmt() {
     for (Map.Entry<String, String> entry : varStatements.entrySet()) {
-      String output = PrintOutputHelper.printOutput(entry.getKey());
+      String output = printOutput(entry.getKey());
       assertEquals(entry.getValue(), output);
     }
   }
@@ -75,14 +76,14 @@ public class StmtInterpreterTest
         }
         print a;
         """;
-    String output = PrintOutputHelper.printOutput(input);
+    String output = printOutput(input);
     assertEquals("global_a\ninner_a\nglobal_a", output);
   }
 
   @Test
   void testIfElseStmt() {
       for (Map.Entry<String, String> entry : ifElseStatements.entrySet()) {
-        String output = PrintOutputHelper.printOutput(entry.getKey());
+        String output = printOutput(entry.getKey());
         assertEquals(entry.getValue(), output);
       }
   }
@@ -90,7 +91,7 @@ public class StmtInterpreterTest
   @Test
   void testAndOrStmt() {
     for (Map.Entry<String, String> entry : andOrStatements.entrySet()) {
-      String output = PrintOutputHelper.printOutput(entry.getKey());
+      String output = printOutput(entry.getKey());
       assertEquals(entry.getValue(), output);
     }
   }
@@ -104,7 +105,7 @@ public class StmtInterpreterTest
           a = a + 1;
         }
         """;
-    String output = PrintOutputHelper.printOutput(input);
+    String output = printOutput(input);
     assertEquals("0\n1\n2", output);
   }
 
@@ -115,7 +116,8 @@ public class StmtInterpreterTest
          print i;  
        }
         """;
-    String output = PrintOutputHelper.printOutput(input);
+    String output;
+    output = printOutput(input);
     assertEquals("0\n1\n2", output);
   }
 

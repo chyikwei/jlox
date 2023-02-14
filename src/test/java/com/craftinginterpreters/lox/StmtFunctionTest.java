@@ -37,7 +37,7 @@ public class StmtFunctionTest
     fun add(a, b) {
       print a + b;
     }
-    print add;  
+    print add;
     """;
     String output = PrintOutputHelper.printOutput(input);
     assertEquals("<fn add>", output);
