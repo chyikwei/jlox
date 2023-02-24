@@ -19,4 +19,15 @@ public class StmtClassTest
     String output = PrintOutputHelper.printOutput(input);
     assertEquals("TestClass", output);
   }
+
+  @Test
+  void testClassInstance() {
+    String input = """
+    class TestClass {}
+    var t = TestClass();
+    print t;
+    """;
+    String output = PrintOutputHelper.printOutput(input);
+    assertEquals("TestClass instance", output);
+  }
 }
