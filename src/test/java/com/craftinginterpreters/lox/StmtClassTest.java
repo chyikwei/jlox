@@ -30,4 +30,16 @@ public class StmtClassTest
     String output = PrintOutputHelper.printOutput(input);
     assertEquals("TestClass instance", output);
   }
+
+  @Test
+  void testSetGetField() {
+    String input = """
+    class TestClass {}
+    var t = TestClass();
+    t.a = "123";
+    print t.a;
+    """;
+    String output = PrintOutputHelper.printOutput(input);
+    assertEquals("123", output);
+  }
 }
