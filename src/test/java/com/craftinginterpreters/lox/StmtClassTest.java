@@ -42,4 +42,18 @@ public class StmtClassTest
     String output = PrintOutputHelper.printOutput(input);
     assertEquals("123", output);
   }
+
+  @Test
+  void testMethod() {
+    String input = """
+    class Bacon {
+      eat() {
+        print "Crunch!";
+      }
+    }
+    Bacon().eat();
+    """;
+    String output = PrintOutputHelper.printOutput(input);
+    assertEquals("Crunch!", output);
+  }
 }
