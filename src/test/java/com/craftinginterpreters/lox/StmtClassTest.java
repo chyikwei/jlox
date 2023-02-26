@@ -56,4 +56,36 @@ public class StmtClassTest
     String output = PrintOutputHelper.printOutput(input);
     assertEquals("Crunch!", output);
   }
+
+  @Test
+  void testPrintThis() {
+    String input = """
+    class Egotist {
+      speak() {
+        print this;
+      }
+    }
+    var method = Egotist().speak;
+    method();
+    """;
+    String output = PrintOutputHelper.printOutput(input);
+    assertEquals("Egotist instance", output);
+  }
+
+  @Test
+  void testMethodReference() {
+    String input = """
+    class Cake {
+      taste() {
+        print this.flavor + " cake is good!";
+      }
+    }
+    var cake = Cake();
+    cake.flavor = "chocolate";
+    cake.taste();
+    """;
+    String output = PrintOutputHelper.printOutput(input);
+    assertEquals("chocolate cake is good!", output);
+  }
+
 }

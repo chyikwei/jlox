@@ -7,14 +7,22 @@ import java.util.Stack;
 
 public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>
 {
+  private enum ClasType {
+    NONE,
+    CLASS
+  }
   private final Interpreter interpreter;
   private final Stack<Map<String, Boolean>> scopes;
   private FunctionType currentFunction;
+
+  private ClasType currentClass;
+
 
   Resolver(Interpreter interpreter) {
     this.interpreter = interpreter;
     this.scopes = new Stack<>();
     currentFunction = FunctionType.NONE;
+    currentClass = ClasType.NONE;
   }
 
   void resolve(List<Stmt> statements) {
@@ -150,6 +158,19 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>
   }
 
   @Override
+  public Void visitThisExpr(Expr.This expr)
+  {
+    //TODO: add test case
+    if (currentClass == ClasType.NONE) {
+      Lox.error(expr.keyword, "Can't use 'this' outside of a class.");
+      return null;
+    }
+
+    resolveLocal(expr, expr.keyword);
+    return null;
+  }
+
+  @Override
   public Void visitUnaryExpr(Expr.Unary expr)
   {
     resolve(expr.right);
@@ -180,14 +201,23 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>
   @Override
   public Void visitClassStmt(Stmt.Class stmt)
   {
+    ClasType enclosingClass = currentClass;
+    currentClass = ClasType.CLASS;
+
     declare(stmt.name);
     define(stmt.name);
+
+    beginScope();
+    scopes.peek().put("this", true);
 
     for (Stmt.Function method : stmt.methods) {
       FunctionType declaration = FunctionType.METHOD;
       resolveFunction(method, declaration);
     }
 
+    endScope();
+
+    currentClass = enclosingClass;
     return null;
   }
 
@@ -229,6 +259,7 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>
   @Override
   public Void visitReturnStmt(Stmt.Return stmt)
   {
+    //TODO: test add test
     if (currentFunction == FunctionType.NONE) {
       Lox.error(stmt.keyword, "Can't return from top-level code.");
     }
