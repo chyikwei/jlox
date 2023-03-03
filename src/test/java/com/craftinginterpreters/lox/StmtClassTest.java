@@ -88,4 +88,65 @@ public class StmtClassTest
     assertEquals("chocolate cake is good!", output);
   }
 
+  @Test
+  void testMethodInheritance() {
+    String input = """
+    class Doughnut {
+      cook() {
+        print "cook";
+      }
+    }
+    class BostonCream < Doughnut {}
+    
+    BostonCream().cook();
+    """;
+    String output = PrintOutputHelper.printOutput(input);
+    assertEquals("cook", output);
+  }
+
+  @Test
+  void testSuperClassMethod() {
+    String input = """
+    class Doughnut {
+      cook() {
+        print "cook";
+      }
+    }
+    class BostonCream < Doughnut {
+      cook() {
+        super.cook();
+        print "more!";
+      }
+    }
+    
+    BostonCream().cook();
+    """;
+    String output = PrintOutputHelper.printOutput(input);
+    assertEquals("cook\nmore!", output);
+  }
+
+  @Test
+  void testSuperBinding() {
+    String input = """
+    class A {
+      method() {
+        print "method A";
+      }
+    }
+    class B < A {
+      method() {
+        print "method B";
+      }
+      
+      test() {
+        super.method();
+      }
+    }
+    
+    class C < B {}
+    C().test();
+    """;
+    String output = PrintOutputHelper.printOutput(input);
+    assertEquals("method A", output);
+  }
 }
